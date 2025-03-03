@@ -1,11 +1,9 @@
 package todo
 
-import "time"
-
 type Todo struct {
-	CreatedAt time.Time
-	Title     string
-	Done      bool
+	DoneAt string `json:"done_at"`
+	Title  string `json:"title"`
+	Done   bool   `json:"done"`
 }
 
 var InitialTodos = []Todo{

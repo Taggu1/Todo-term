@@ -3,22 +3,26 @@ package main
 import (
 	"fmt"
 
+	"example.org/todo-term/database"
 	"example.org/todo-term/todo"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 type model struct {
 	todos      []todo.Todo
+	doneTodos  []todo.Todo
 	cursor     int
 	todoText   textinput.Model
 	addingTodo bool
 }
 
 func initialModel() model {
-
+	db := database.LoadTodos()
 	return model{
-		todos:      todo.InitialTodos,
+		todos:      db.Todos,
+		doneTodos:  db.DoneTodos,
 		addingTodo: false,
 		todoText:   AddTodoWidget(),
 	}
@@ -56,27 +60,40 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	s := "Welcome to term-todo\n\n"
-	doneTodos := []todo.Todo{}
+
+	// var todoTextStyle = lipgloss.NewStyle().
+	// 	Foreground(lipgloss.Color("#cdd6f4")).
+	// 	Inline(true)
 
 	for index, todo := range m.todos {
 
-		if todo.Done {
-			doneTodos = append(doneTodos, todo)
-			continue
-		}
 		current := " "
 		if index == m.cursor {
 			current = "x"
 		}
 
-		s += fmt.Sprintf("[%s] %s\n", current, todo.Title)
+		s += fmt.Sprintf("[%s] %s", current, todo.Title)
+		s += "\n"
 	}
 
-	s += "\n-----Done----\n"
+	var doneTextStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#bac2de")).
+		Inline(true)
 
-	for _, todo := range doneTodos {
+	s += "\n"
+	s += doneTextStyle.Render("-----Done----")
+	s += "\n\n"
 
-		s += fmt.Sprintf("[✅] %s\n", todo.Title)
+	var doneTodoTextStyle = lipgloss.NewStyle().
+		Strikethrough(true).
+		AlignHorizontal(lipgloss.Left).
+		Foreground(lipgloss.Color("#45475a")).
+		Inline(true)
+
+	for _, todo := range m.doneTodos {
+
+		s += doneTodoTextStyle.Render(fmt.Sprintf("[✅] %s At %v", todo.Title, todo.DoneAt))
+		s += "\n"
 	}
 
 	s += "\n"
