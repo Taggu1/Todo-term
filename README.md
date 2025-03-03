@@ -1,4 +1,11 @@
 # Todo-term
+This is a todo application in terminal that I made to practise using go
 
-This is how it looks currently
-![showcase](assets/showcase.gif)
+## Features
+    - Creating new to-dos
+    - saving to-do to a json file
+    - checking to-dos
+
+
+### This is how it looks currently
+<img src="assets/showcase.gif" alt="showcase" width="200" height="200">
