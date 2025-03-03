@@ -8,4 +8,4 @@ This is a todo application in terminal that I made to practise using go
 
 
 ### This is how it looks currently
-<img src="assets/showcase.gif" alt="showcase" width="500" height="200">
+<img src="assets/showcase.gif" alt="showcase" width="500" height="300">
